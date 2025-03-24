@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infinispan
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:infinispan:config:15.1 http://www.infinispan.org/schemas/infinispan-config-15.1.xsd"
+        xmlns="urn:infinispan:config:15.1">
+
+    <cache-container name="keycloak">
+        <transport cluster="${infinispan.cluster.name:globalCluster}" stack="tcp" lock-timeout="60000" site="site1"/>
+
+        <!-- Convertendo todos os caches locais para distribuídos -->
+        <distributed-cache name="realms" owners="2">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="realms"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <distributed-cache name="users" owners="2">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="users"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <distributed-cache name="authorization" owners="2">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="authorization"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <distributed-cache name="keys" owners="2">
+            <expiration max-idle="3600000"/>
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="keys"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <!-- Os outros caches distribuídos já estavam corretos, então mantive -->
+
+        <distributed-cache name="sessions" owners="2">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="sessions"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <distributed-cache name="authenticationSessions" owners="2">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="authenticationSessions"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <distributed-cache name="offlineSessions" owners="2">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="offlineSessions"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <distributed-cache name="clientSessions" owners="2">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="clientSessions"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <distributed-cache name="actionTokens" owners="2">
+            <expiration max-idle="-1" interval="300000"/>
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="actionTokens"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </distributed-cache>
+
+        <replicated-cache name="work">
+            <remote-store xmlns="urn:infinispan:config:store:remote:15.1"
+                          cache="work"
+                          purge="false"
+                          preload="false"
+                          segmented="false"
+                          shared="true"
+                          raw-values="true"
+                          marshaller="org.keycloak.cluster.infinispan.KeycloakHotRodMarshallerFactory">
+                <remote-server host="infinispan.smarters.io" port="443"/>
+                <security>
+                    <authentication server-name="infinispan">
+                        <digest username="admin" password="password" realm="master"/>
+                    </authentication>
+                </security>
+            </remote-store>
+        </replicated-cache>
+    </cache-container>
+</infinispan>
